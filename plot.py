@@ -5,6 +5,11 @@
 
 
 import argparse
+
+#added by Shu, 20240227---
+import sys
+sys.path.append("/opt/homebrew/lib/root/")
+
 import ROOT
 
 ROOT.gROOT.SetBatch(True)
