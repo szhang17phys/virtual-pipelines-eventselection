@@ -2,25 +2,22 @@ name: example
 on: push
 jobs:
   greeting:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo hello world
+	runs-on: ubuntu-latest
+	steps:
+	  - run: echo hello world
   
   build_skim:
 	runs-on: ubuntu-latest
-	defaults:
-	  run:
-		shell: bash -el {0}
+	container: rootproject/root:${{ matrix.version }}
+	strategy:
+	  matrix:
+		version: [6.26.10-conda, latest]
 	steps:
 	  - name: checkout repository
-	  uses: actions/checkout@v4
-	  - name: Install ROOT
-	  uses: mamba-org/setup-micromamba@v1
-	  with:
-		environment-name: env
-		create-args: root
+		uses: actions/checkout@v4
+  
 	  - name: build
 		run: |
-		  COMPILER=$(root-config --cxx)
-	      FLAGS=$(root-config --cflags --libs)
-		  $COMPILER -g -O3 -Wall -Wextra -Wpedantic -o skim skim.cxx $FLAGS
+		 COMPILER=$(root-config --cxx)
+		 FLAGS=$(root-config --cflags --libs)
+		 $COMPILER -g -O3 -Wall -Wextra -Wpedantic -o skim skim.cxx $FLAGS
